@@ -54,8 +54,9 @@ units["temperature"] = "Celsius"
 units["humidity"] = "%"
 units["feelslike"] = "Celsius"
 
-influxdb_url = 'http://10.2.10.5:8086/write?db=temp_test'
+influxdb_url = ""
 
 if __name__ == "__main__":
+    influxdb_url = 'http://'+os.environ['INFLUXDB_HOST']+':8086/write?db=temp_test'
     gather_weatherstack_data(os.environ['WEATHER_GETTER_CITY'],os.environ['WEATHERSTACK_APIKEY'])
     gather_openweathermap_data(os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
