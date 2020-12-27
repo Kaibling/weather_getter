@@ -1,3 +1,5 @@
+```shell
 export WEATHER_GETTER_CITY=""
 export WEATHERSTACK_APIKEY=""
 export OPENWEATHERMAP_APIKEY=""
+```
