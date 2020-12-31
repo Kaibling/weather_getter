@@ -14,7 +14,7 @@ if __name__ == "__main__":
     schedule.every().hour.at(':00').do(gather_data.gather_openweathermap_data,os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
     schedule.every().hour.at(':00').do(gather_data.save_gold_price)
     schedule.every().hour.at(':00').do(gather_data.save_btc)
-    schedule.every(2).day.do(gather_data.forecast,os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
+    schedule.every(2).days.do(gather_data.forecast,os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
 
     while 1:
         try:
