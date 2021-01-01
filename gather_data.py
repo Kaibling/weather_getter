@@ -13,6 +13,9 @@ def save_btc():
     url = "https://api.kraken.com/0/public/Depth?pair=xbteur&count=1"
     logging.info("Start gathering: {}".format(external_source))
     result = requests.get(url)
+    if result.status_code != 200:
+        logging.error("request not successful: {}. {}".format(url,result.content))
+        return
     market = json.loads(result.content)["result"]["XXBTZEUR"]["asks"][0]
     send_future_metrics("btc",str(market[0]),"EUR",external_source,str(market[2])+"000000000")
     logging.info("Finished: {}".format(external_source))
@@ -23,6 +26,10 @@ def save_gold_price():
     url = "https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAU/EUR"
     logging.info("Start gathering: {}".format(external_source))
     result = requests.get(url)
+    if result.status_code != 200:
+        logging.error("request not successful: {}. {}".format(url,result.content))
+        return
+
     market = json.loads(result.content)[0]
 
     timestamp = ""
