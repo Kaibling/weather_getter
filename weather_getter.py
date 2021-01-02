@@ -13,12 +13,11 @@ if __name__ == "__main__":
     influxdb_db = os.environ['INFLUXDB_DATABASE']
     configuration.influx_config = configuration._influxdb_conf(influxdb_url,influxdb_db)
 
-    #schedule.every().hour.at(':00').do(gather_data.gather_weatherstack_data,os.environ['WEATHER_GETTER_CITY'],os.environ['WEATHERSTACK_APIKEY'])
-    #schedule.every().hour.at(':00').do(gather_data.gather_openweathermap_data,os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
-    #schedule.every().hour.at(':59').do(gather_data.save_gold_price)
-    schedule.every(2).seconds.do(gather_data.save_gold_price)
-    #schedule.every().hour.at(':01').do(gather_data.save_btc)
-    #schedule.every().hour.at(':00').do(gather_data.forecast,os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
+    schedule.every().hour.at(':00').do(gather_data.gather_weatherstack_data,os.environ['WEATHER_GETTER_CITY'],os.environ['WEATHERSTACK_APIKEY'])
+    schedule.every().hour.at(':00').do(gather_data.gather_openweathermap_data,os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
+    schedule.every().hour.at(':59').do(gather_data.save_gold_price)
+    schedule.every().hour.at(':01').do(gather_data.save_btc)
+    schedule.every().hour.at(':00').do(gather_data.forecast,os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
 
     logging.info('Application started..')
     while 1:
