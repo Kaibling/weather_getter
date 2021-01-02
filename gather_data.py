@@ -15,7 +15,7 @@ def save_btc():
     logging.info("Start gathering: {}".format(external_source))
     result = requests.get(url)
     if result.status_code != 200:
-        logging.error("request not successful: {}. {}".format(url,result.content))
+        logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
         return
     try:
         market = json.loads(result.content)["result"]["XXBTZEUR"]["asks"][0]
@@ -31,7 +31,7 @@ def save_gold_price():
     logging.info("Start gathering: {}".format(external_source))
     result = requests.get(url)
     if result.status_code != 200:
-        logging.error("request not successful: {}. {}".format(url,result.content))
+        logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
         return
 
     try:
@@ -56,7 +56,7 @@ def gather_weatherstack_data(city,apikey):
 
     result = requests.get(weatherstack_url)
     if result.status_code != 200:
-        print("request not successful",weatherstack_url)
+        logging.error("request not successful: {}:{} {}".format(weatherstack_url,result.status_code,result.content))
         return
     try:
         current_weather = json.loads(result.content)
@@ -78,8 +78,7 @@ def gather_openweathermap_data(city,apikey):
     
     result = requests.get(url)
     if result.status_code != 200:
-        print("request not successful",url)
-        print(result.content)
+        logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
         return
     try:
         current_weather = json.loads(result.content)
@@ -100,15 +99,17 @@ def forecast(city,apikey):
     lon=15.4382786
     url = "http://api.openweathermap.org/data/2.5/onecall?lat="+str(lat)+"&lon="+str(lon)+"&appid="+ apikey + "&units=metric&exclude=minutely,daily"
 
-    
-    result = get_last_timestamp(external_source,"temperature")
-    result_json = json.loads(result)
-    last_entry = result_json['results'][0]['series'][0]['values'][0][0]
-    current_time = time.time_ns()
-    onehour_ns_time = current_time + 3600000000000
-    if onehour_ns_time < last_entry:
-        print("is jetzt")
-        return
+    try:
+        result = get_last_timestamp(external_source,"temperature")
+        result_json = json.loads(result)
+        last_entry = result_json['results'][0]['series'][0]['values'][0][0]
+        current_time = time.time_ns()
+        onehour_ns_time = current_time + 3600000000000
+        if onehour_ns_time < last_entry:
+            print("is jetzt")
+            return
+    except Exception as err:
+        logging.exception("{} {}".format(external_source,err))
   
     logging.info("Start gathering: {}".format(external_source))
     
