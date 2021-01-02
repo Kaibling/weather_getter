@@ -42,7 +42,6 @@ def save_gold_price():
             if market_type["spreadProfile"] == "Standard":
                 timestamp = str(market["ts"])
                 price = market_type["bid"]  
-        print(price)
         send_future_metrics("gold",price,"EUR",external_source,timestamp+"000000")
         logging.info("Finished: {}".format(external_source))
     except Exception as err:
@@ -106,7 +105,6 @@ def forecast(city,apikey):
         current_time = time.time_ns()
         onehour_ns_time = current_time + 3600000000000
         if onehour_ns_time < last_entry:
-            print("is jetzt")
             return
     except Exception as err:
         logging.exception("{} {}".format(external_source,err))
@@ -115,8 +113,7 @@ def forecast(city,apikey):
     
     result = requests.get(url)
     if result.status_code != 200:
-        print("request not successful",url)
-        print(result.content)
+        logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
         return
 
     try:
