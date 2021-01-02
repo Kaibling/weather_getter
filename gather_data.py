@@ -1,7 +1,8 @@
 import requests
 import json
 import logging
-from transmission import send_metrics,send_future_metrics
+from transmission import send_metrics,send_future_metrics,get_last_timestamp
+import time
 
 units = dict()
 units["temperature"] = "Celsius"
@@ -87,6 +88,16 @@ def forecast(city,apikey):
     lat=47.0708678
     lon=15.4382786
     url = "http://api.openweathermap.org/data/2.5/onecall?lat="+str(lat)+"&lon="+str(lon)+"&appid="+ apikey + "&units=metric&exclude=minutely,daily"
+
+    result = get_last_timestamp(external_source,"temperature")
+    result_json = json.loads(result)
+    last_entry = result_json['results'][0]['series'][0]['values'][0][0]
+    current_time = time.time_ns()
+    onehour_ns_time = current_time + 3600000000000
+    if onehour_ns_time < last_entry:
+        print("is jetzt")
+        return
+  
     logging.info("Start gathering: {}".format(external_source))
     
     result = requests.get(url)
