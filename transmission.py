@@ -27,3 +27,10 @@ def get_last_timestamp(external_source,measuretype):
         return
     logging.info("received timestamp for: {}".format(external_source))
     return result.content
+
+def send_custom_metrics(data):
+    result = requests.post(url=configuration.influx_config.write_url,data=data)
+    if result.status_code != 204:
+        logging.error("request not successful: {}:{} {}".format(configuration.influx_config.write_url,result.status_code,result.content))
+        return
+    logging.info("sending: {}".format(data))

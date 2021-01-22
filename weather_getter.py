@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 import os
 import logging
 import schedule
@@ -13,6 +15,7 @@ if __name__ == "__main__":
     influxdb_db = os.environ['INFLUXDB_DATABASE']
     configuration.influx_config = configuration._influxdb_conf(influxdb_url,influxdb_db)
 
+    #gather_data.save_corona_data()
     schedule.every().hour.at(':00').do(gather_data.gather_weatherstack_data,os.environ['WEATHER_GETTER_CITY'],os.environ['WEATHERSTACK_APIKEY'])
     schedule.every().hour.at(':00').do(gather_data.gather_openweathermap_data,os.environ['WEATHER_GETTER_CITY'],os.environ['OPENWEATHERMAP_APIKEY'])
     schedule.every().hour.at(':59').do(gather_data.save_gold_price)
