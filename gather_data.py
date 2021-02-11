@@ -82,12 +82,11 @@ def save_gold_price():
     external_source = "forex-gold"
     url = "https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAU/EUR"
     logging.info("Start gathering: {}".format(external_source))
-    result = requests.get(url)
-    if result.status_code != 200:
-        logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
-        return
-
     try:
+        result = requests.get(url)
+        if result.status_code != 200:
+            logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
+            return
         market = json.loads(result.content)[0]
         timestamp = ""
         price = -1
@@ -106,11 +105,12 @@ def gather_weatherstack_data(city,apikey):
     external_source = "weatherstack"
     logging.info("Start gathering: {}".format(external_source))
 
-    result = requests.get(weatherstack_url)
-    if result.status_code != 200:
-        logging.error("request not successful: {}:{} {}".format(weatherstack_url,result.status_code,result.content))
-        return
+
     try:
+        result = requests.get(weatherstack_url)
+        if result.status_code != 200:
+            logging.error("request not successful: {}:{} {}".format(weatherstack_url,result.status_code,result.content))
+            return
         current_weather = json.loads(result.content)
         temperature = current_weather["current"]["temperature"]
         humidity = current_weather["current"]["humidity"]
@@ -128,11 +128,12 @@ def gather_openweathermap_data(city,apikey):
     url = "http://api.openweathermap.org/data/2.5/weather?q="+ city + "&appid=" + apikey + "&units=metric"
     logging.info("Start gathering: {}".format(external_source))
     
-    result = requests.get(url)
-    if result.status_code != 200:
-        logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
-        return
+
     try:
+        result = requests.get(url)
+        if result.status_code != 200:
+            logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
+            return
         current_weather = json.loads(result.content)
         temperature = current_weather["main"]["temp"]
         humidity = current_weather["main"]["humidity"]
@@ -164,12 +165,13 @@ def forecast(city,apikey):
   
     logging.info("Start gathering: {}".format(external_source))
     
-    result = requests.get(url)
-    if result.status_code != 200:
-        logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
-        return
+
 
     try:
+        result = requests.get(url)
+        if result.status_code != 200:
+            logging.error("request not successful: {}:{} {}".format(url,result.status_code,result.content))
+            return
         weatherdata = json.loads(result.content)
         for day in weatherdata["hourly"]:
             timestamp = str(day["dt"])+"000000000"
